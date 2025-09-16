@@ -4,6 +4,7 @@ import Link from "next/link";
 import products from "./products";
 import { useState, useEffect } from "react";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
 const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
@@ -13,6 +14,7 @@ export default function HomeClient() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category") || "All";
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
+  const router = useRouter();
 
   useEffect(() => {
     const stored = localStorage.getItem("wishlist");
@@ -39,7 +41,7 @@ export default function HomeClient() {
     : products.filter((p) => p.category === selectedCategory);
 
   function handleBuyClick(product: { id: number; name: string; price: number; image: string; category: string; icon: string; emoji: string; }): void {
-    throw new Error("Function not implemented.");
+    router.push(`/checkout?id=${product.id}`);
   }
 
   return (
